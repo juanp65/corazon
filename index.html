@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Corazón 3D en AR</title>
+
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: #0a86c9;
+      color: #fff;
+      font-family: system-ui, Segoe UI, Roboto;
+    }
+    header {
+      position: fixed;
+      inset: 0 auto auto 0;
+      right: 0;
+      background: #0e3e4f;
+      padding: 10px 12px;
+      text-align: center;
+      z-index: 10;
+    }
+    model-viewer {
+      display: block;
+      width: min(95vw, 900px);
+      height: min(75vh, 620px);
+      margin: 80px auto 12px;
+      background: #000;
+      border-radius: 12px;
+    }
+    .msg {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    a.btn {
+      display: inline-block;
+      margin: 6px 8px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: #0e6174;
+      color: #fff;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <header><b>AR · Corazón 3D (GLB/USDZ con model-viewer)</b></header>
+
+  <model-viewer id="mv"
+    src="assets/realistic_human_heart.glb"
+    alt="Corazón humano 3D"
+    ar
+    ar-modes="webxr scene-viewer quick-look"
+    camera-controls
+    auto-rotate
+    autoplay
+    exposure="1"
+    shadow-intensity="1">
+  </model-viewer>
+
+  <div class="msg">
+    <p>Abre este mismo enlace en tu teléfono y toca el ícono de <b>AR</b> para verlo en realidad aumentada.</p>
+    <p>Si no ves el corazón, verifica que el archivo <code>assets/heart_generated.glb</code> esté en su carpeta.</p>
+    <a href="assets/heart_generated.glb" class="btn">Descargar modelo GLB</a>
+  </div>
+</body>
+</html>
