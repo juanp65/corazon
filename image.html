@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>AR · Hígado Tamaño Corregido</title>
+
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.2/aframe/build/aframe-ar.min.js"></script>
+
+  <style>
+    body { margin: 0; overflow: hidden; font-family: system-ui, sans-serif; }
+    .ui-container { position: absolute; top: 0; left: 0; width: 100%; z-index: 10; }
+    header { background: rgba(14, 62, 79, 0.9); padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; color: white; }
+    .title { font-weight: 600; font-size: 14px; }
+    .tabs { display: flex; gap: 8px; }
+    .tab { border-radius: 999px; border: 1px solid rgba(255,255,255,.35); padding: 6px 12px; background: rgba(255,255,255,.1); color: #fff; font-size: 12px; cursor: pointer; }
+    .tab.active { background: #e63946; border-color: #e63946; }
+    .hint { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: white; background: rgba(0,0,0,0.6); padding: 8px 16px; border-radius: 20px; font-size: 12px; pointer-events: none; text-align: center; width: 80%; }
+  </style>
+</head>
+
+<body>
+
+  <div class="ui-container">
+    <header>
+      <div class="title">AR · Órganos</div>
+      <div class="tabs">
+        <button class="tab active" onclick="cambiarOrgano('heart', this)">Corazón</button>
+        <button class="tab" onclick="cambiarOrgano('brain', this)">Cerebro</button>
+        <button class="tab" onclick="cambiarOrgano('liver', this)">Hígado</button>
+      </div>
+    </header>
+  </div>
+
+  <div class="hint">Apunta el marcador Hiro</div>
+
+  <a-scene embedded arjs>
+    <a-light type="ambient" color="#ffffff" intensity="1"></a-light>
+    <a-light type="directional" color="#ffffff" intensity="2" position="1 1 1"></a-light>
+
+    <a-marker preset="hiro">
+      
+      <a-entity rotation="-90 0 0">
+        
+        <a-gltf-model
+          id="modelo-activo"
+          src="assets/realistic_human_heart.glb" 
+          scale="0.8 0.8 0.8"
+          position="0 0 0"
+          rotation="0 0 0"
+          animation__rotar="property: rotation; to: 0 -360 0; loop: true; dur: 8000; easing: linear"
+          animation__latido="property: scale; from: 0.8 0.8 0.8; to: 1.0 1.0 1.0; dur: 500; dir: alternate; loop: true; easing: easeOutBack">
+        </a-gltf-model>
+
+      </a-entity> 
+    </a-marker>
+    
+    <a-entity camera></a-entity>
+  </a-scene>
+
+  <script>
+    const MODELOS = {
+      heart: 'assets/realistic_human_heart.glb',
+      brain: 'assets/human_brain.glb',
+      liver: 'assets/human_liver.glb'
+    };
+
+
+    const ESCALAS = {
+      heart: '0.8 0.8 0.8',
+      brain: '1.5 1.5 1.5',
+      liver: '0.4 0.4 0.4'  
+    };
+
+    const LATIDO_SCALE_FROM = '0.8 0.8 0.8'; 
+    const LATIDO_SCALE_TO = '1.0 1.0 1.0'; 
+
+    function cambiarOrgano(nombre, boton) {
+      const entidad = document.getElementById('modelo-activo');
+      
+      entidad.setAttribute('src', MODELOS[nombre]);
+      const escalaBase = ESCALAS[nombre];
+      entidad.setAttribute('scale', escalaBase);
+
+      if (nombre === 'heart') {
+        entidad.setAttribute('animation__latido', `property: scale; from: ${LATIDO_SCALE_FROM}; to: ${LATIDO_SCALE_TO}; dur: 500; dir: alternate; loop: true; easing: easeOutBack`);
+      } else {
+        entidad.removeAttribute('animation__latido');
+        entidad.setAttribute('scale', escalaBase);
+      }
+
+      document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+      boton.classList.add('active');
+    }
+  </script>
+</body>
+</html>
